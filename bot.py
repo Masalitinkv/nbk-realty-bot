@@ -10,20 +10,28 @@ bot = telebot.TeleBot(TOKEN)
 
 def geocode(address):
     url = "https://geocode-maps.yandex.ru/1.x/"
+
     params = {
         "apikey": YANDEX_API_KEY,
         "geocode": address,
         "format": "json"
     }
 
-    response = requests.get(url, params=params).json()
-print(response)
+    response = requests.get(url, params=params)
 
-    pos = response["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["Point"]["pos"]
+    data = response.json()
 
-    lon, lat = pos.split()
+    print(data)
 
-    return lat, lon
+    try:
+        pos = data["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["Point"]["pos"]
+
+        lon, lat = pos.split()
+
+        return lat, lon
+
+    except Exception as e:
+        raise Exception(f"Ошибка геокодирования: {data}")
 
 
 def search_places(lat, lon):
