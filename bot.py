@@ -4,8 +4,7 @@ import requests
 
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 YANDEX_API_KEY = os.getenv("YANDEX_API_KEY")
-DGIS_API_KEY = os.getenv("DGIS_API_KEY")
-
+DGIS_API_KEY = os.getenv("DGIS_API_KEY") or os.getenv("2GIS_API_KEY")
 bot = telebot.TeleBot(TOKEN)
 
 
@@ -18,6 +17,7 @@ def geocode(address):
     }
 
     response = requests.get(url, params=params).json()
+print(response)
 
     pos = response["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["Point"]["pos"]
 
